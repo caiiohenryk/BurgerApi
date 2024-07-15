@@ -51,5 +51,22 @@ public static class BurgerRouter {
             return Results.Ok(new BurgerResponseDto(burger.Id, burger.Nome));
         });
 
+        // DELETEs
+        rotasBurgers.MapDelete("{id}",
+        async (Guid id, AppDbContext context) =>
+        {
+            var burger = await context.Burgers
+            .SingleOrDefaultAsync(burger => burger.Id == id);
+
+            if (burger == null) return Results.NotFound("Objeto não encontrado");
+            if (burger.Ativo == false) return Results.Conflict("Objeto já desativado");
+
+            burger.desativar();
+
+            await context.SaveChangesAsync();
+            return Results.Ok();
+
+        });
+
     }
 }

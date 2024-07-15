@@ -14,4 +14,8 @@ public class Burger {
     public void atualizarNome(String nome) {
         Nome = nome;
     }
+
+    public void desativar () {
+        Ativo = false;
+    }
 }

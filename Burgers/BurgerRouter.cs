@@ -1,6 +1,5 @@
 using BurgerApi.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 
 namespace BurgerApi.Burgers;
 
@@ -33,6 +32,7 @@ public static class BurgerRouter {
             var burgers = await appDbContext
             .Burgers
             .Where(burgers => burgers.Ativo == true)
+            .Select(burger => new BurgerResponseDto(burger.Id, burger.Nome))
             .ToListAsync();
             return burgers;
         });
@@ -48,7 +48,7 @@ public static class BurgerRouter {
             burger.atualizarNome(request.nome);
 
             await context.SaveChangesAsync();
-            return Results.Ok(burger);
+            return Results.Ok(new BurgerResponseDto(burger.Id, burger.Nome));
         });
 
     }

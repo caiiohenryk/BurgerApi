@@ -7,9 +7,11 @@ namespace BurgerApi.Data;
 public class AppDbContext : DbContext {
     public DbSet<Burger> Burgers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        optionsBuilder.UseSqlite("Data source=Banco.sqlite");
-        base.OnConfiguring(optionsBuilder);
+        base.OnModelCreating(modelBuilder);
     }
+
 }

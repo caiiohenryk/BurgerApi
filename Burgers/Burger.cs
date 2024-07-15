@@ -10,4 +10,8 @@ public class Burger {
         Id = Guid.NewGuid();
         Ativo = true;
     }
+
+    public void atualizarNome(String nome) {
+        Nome = nome;
+    }
 }

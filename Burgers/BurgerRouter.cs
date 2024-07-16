@@ -13,7 +13,7 @@ public static class BurgerRouter {
          rotasBurgers.MapPost("",
         //  o CancellationToken é uma boa prática que garante o bom funcionamento do banco de dados em caso de
         // fechamento indevido da aplicação enquanto ainda houver persistência do BD;
-         async (AddBurgerRequest request, AppDbContext context, CancellationToken ctoken) => {
+         async (BurgerRequestDto request, AppDbContext context, CancellationToken ctoken) => {
             var jaExiste = await context.Burgers
             .AnyAsync(Burger => Burger.Nome == request.Nome, ctoken);
 
@@ -54,7 +54,7 @@ public static class BurgerRouter {
 
         // PUTs
         rotasBurgers.MapPut("{id}",
-        async (UpdateBurgerRequest request, AppDbContext context, Guid id, CancellationToken ctoken) => {
+        async (BurgerUpdateDto request, AppDbContext context, Guid id, CancellationToken ctoken) => {
             var burger = await context.Burgers
             .SingleOrDefaultAsync(burger => burger.Id == id, ctoken);
 

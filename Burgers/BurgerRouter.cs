@@ -10,7 +10,7 @@ public static class BurgerRouter {
 
 
         // POSTs
-         rotasBurgers.MapPost("burgers",
+         rotasBurgers.MapPost("",
         //  o CancellationToken é uma boa prática que garante o bom funcionamento do banco de dados em caso de
         // fechamento indevido da aplicação enquanto ainda houver persistência do BD;
          async (AddBurgerRequest request, AppDbContext context, CancellationToken ctoken) => {
@@ -18,7 +18,7 @@ public static class BurgerRouter {
             .AnyAsync(Burger => Burger.Nome == request.Nome, ctoken);
 
             if (jaExiste)
-            return Results.Conflict("Estudante já existe.");
+            return Results.Conflict("Objeto já existe.");
 
             var newBurger = new Burger(request.Nome);
             await context.Burgers.AddAsync(newBurger, ctoken);
@@ -30,14 +30,27 @@ public static class BurgerRouter {
         
 
         // GETs
-        rotasBurgers.MapGet("", async (AppDbContext appDbContext, CancellationToken ctoken) => {
-            var burgers = await appDbContext
+        rotasBurgers.MapGet("", async (AppDbContext context, CancellationToken ctoken) => {
+            var burgers = await context
             .Burgers
             .Where(burgers => burgers.Ativo == true)
             .Select(burger => new BurgerResponseDto(burger.Id, burger.Nome))
             .ToListAsync(ctoken);
             return burgers;
         });
+
+        rotasBurgers.MapGet("{id}",
+        async (Guid id, AppDbContext context, CancellationToken ctoken) => 
+        {
+            var burger = await context.Burgers
+            .SingleOrDefaultAsync(burger => burger.Id == id);
+
+            if (burger == null) return Results.NotFound("Objeto não encontrado");
+            if (!burger.Ativo) return Results.Conflict("Objeto desativado.");
+
+            return Results.Ok(new BurgerResponseDto(burger.Id, burger.Nome));
+        });
+        
 
         // PUTs
         rotasBurgers.MapPut("{id}",

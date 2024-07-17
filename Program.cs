@@ -1,4 +1,4 @@
-using BurgerApi.Burgers;
+using BurgerApi.Burgers.Services;
 using BurgerApi.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,11 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 builder.Services.AddScoped<AppDbContext>();
 
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
+
+builder.Services.AddScoped<BurgerService>();
 
 var app = builder.Build();
 
@@ -24,9 +27,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
 // Rotas da API;
-app.AddBurgerRoutes();
+app.MapControllers();
 
 
 app.Run();

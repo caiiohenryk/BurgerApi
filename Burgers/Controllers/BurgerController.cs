@@ -43,7 +43,8 @@ public class BurgerController : ControllerBase {
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken ctoken) {
-        return Ok(await _service.Desativar(id, ctoken));
+        await _service.Desativar(id, ctoken);
+        return NoContent();
     }
 
 }

@@ -1,3 +1,3 @@
 namespace BurgerApi.Burgers;
 
-public record BurgerUpdateDto(String nome);
+public record BurgerUpdateDto(string nome);

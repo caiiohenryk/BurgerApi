@@ -1,3 +1,4 @@
+using BurgerApi.Burgers.Models;
 using BurgerApi.Data;
 using Microsoft.EntityFrameworkCore;
 
